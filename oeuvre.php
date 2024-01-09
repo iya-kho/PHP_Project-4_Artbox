@@ -5,17 +5,19 @@
     // Si l'URL ne contient pas d'id, on redirige sur la page d'accueil
     if(empty($_GET['id'])) {
         header('Location: index.php');
+        exit();
     }
 
     $bdd = connexionBdd();
     $sqlQuery = 'SELECT * FROM artworks WHERE artwork_id = :id';
     $req = $bdd->prepare($sqlQuery);
-    $req->execute(['id' => $_GET['id']]);
+    $req->execute(['id' => intval($_GET['id'])]);
     $oeuvre = $req->fetch();
 
     // Si aucune oeuvre trouvé, on redirige vers la page d'accueil
     if(!$oeuvre) {
         header('Location: index.php');
+        exit();
     }
 ?>
 
