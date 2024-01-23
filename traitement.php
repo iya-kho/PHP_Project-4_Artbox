@@ -1,6 +1,6 @@
 <?php
 
-require 'header.php';
+require_once 'views/header.php';
 
 $formData = $_POST;
 
@@ -42,20 +42,17 @@ $description = htmlspecialchars($formData['description']);
 
 // Ajouter l'oeuvre à la base de données
 
-require 'bdd.php';
+require_once 'models/dbManager.php';
 
-$bdd = connexionBdd();
-$sqlQuery = 'INSERT INTO artworks (title, artist, description, imageUrl) VALUES (:titre, :artiste, :description, :image)';
-$req = $bdd->prepare($sqlQuery);
-$req->execute([
-  'titre' => $titre,
-  'artiste' => $artiste,
-  'description' => $description,
-  'image' => $image
+$newId = addWork([
+  'titre' => $titre, 
+  'artiste' => $artiste, 
+  'image' => $image, 
+  'description' => $description
 ]);
 
-header('Location: oeuvre.php?id=' . $bdd->lastInsertId());
+header('Location: oeuvre.php?id=' . $newId);
 
-require 'footer.php';
+require_once 'views/footer.php';
 
 ?>

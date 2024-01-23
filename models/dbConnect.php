@@ -1,6 +1,6 @@
 <?php
 
-function connexionBdd() {
+function dbConnection() {
   try {
     return new PDO(
     'mysql:host=localhost;dbname=artbox;charset=utf8',
@@ -11,5 +11,3 @@ function connexionBdd() {
     die('Erreur : ' . $e->getMessage());
   }
 }
-
-?>
