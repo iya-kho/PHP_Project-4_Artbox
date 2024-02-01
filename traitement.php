@@ -1,58 +1,33 @@
 <?php
+require_once 'repositories/dbManager.php';
+require_once 'utils/validator.php';
 
-require_once 'views/header.php';
-
-$formData = $_POST;
 
 // Vérifier que le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+  $formData = $_POST;
 
-if (!isset($formData['submit'])) {
-  header('Location: index.php');
-  exit();
-}
+  // Vérifier que les données sont valides
+  $validation = validator($formData);
 
-// Vérifier que tous les champs sont remplis
+  // Si les données sont valides, ajouter l'oeuvre à la base de données
+  if ($validation['isValid']) {
+    $titre = htmlspecialchars($formData['titre']);
+    $artiste = htmlspecialchars($formData['artiste']);
+    $image = htmlspecialchars($formData['image']);
+    $description = htmlspecialchars($formData['description']);
 
-function isEmpty($data) {
-  foreach ($data as $key => $value) {
-    if (empty($value) || trim($value) == '') {
-      return true;
-    }
+    $newId = addWork([
+      'titre' => $titre, 
+      'artiste' => $artiste, 
+      'image' => $image, 
+      'description' => $description
+    ]); 
+
+    header('Location: oeuvre.php?id=' . $newId);
   }
-  return false;
+
+  foreach ($validation['errors'] as $error) {
+    echo '<p class="errorMessage">' . $error . '</p>';
+  }
 }
-
-//Vérifier que la forme est valide
-
-if (isEmpty($formData)) {
-  echo 'Veuillez remplir tous les champs';
-  return;
-} elseif (!filter_var($formData['image'], FILTER_VALIDATE_URL)) {
-  echo 'L\'URL de l\'image n\'est pas valide';
-  return;
-} elseif (strlen($formData['description']) < 3) {
-  echo 'La description doit faire au moins 3 caractères';
-  return;
-}
-
-$titre = htmlspecialchars($formData['titre']);
-$artiste = htmlspecialchars($formData['artiste']);
-$image = htmlspecialchars($formData['image']);
-$description = htmlspecialchars($formData['description']);
-
-// Ajouter l'oeuvre à la base de données
-
-require_once 'models/dbManager.php';
-
-$newId = addWork([
-  'titre' => $titre, 
-  'artiste' => $artiste, 
-  'image' => $image, 
-  'description' => $description
-]);
-
-header('Location: oeuvre.php?id=' . $newId);
-
-require_once 'views/footer.php';
-
-?>

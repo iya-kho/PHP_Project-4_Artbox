@@ -1,6 +1,6 @@
 <?php
 require_once 'views/header.php';
-require_once 'models/dbManager.php';
+require_once 'repositories/dbManager.php';
 
 // Si l'URL ne contient pas d'id, on redirige sur la page d'accueil
 if(empty($_GET['id'])) {
@@ -9,7 +9,7 @@ if(empty($_GET['id'])) {
 }
 
 // On récupère l'oeuvre correspondant à l'id
-$oeuvre = getOneWork($_GET['id']);
+$oeuvre = getOneWork((int) $_GET['id']);
 
 // Si aucune oeuvre trouvée, on redirige vers la page d'accueil
 if(!$oeuvre) {

@@ -12,10 +12,10 @@ function getAllWorks() {
   return $oeuvres;
 }
 
-function getOneWork($id) {
+function getOneWork(int $id): array|bool {
   $sqlQuery = 'SELECT * FROM artworks WHERE id = :id';
   $req = getDb()->prepare($sqlQuery);
-  $req->execute(['id' => intval($id)]);
+  $req->execute(['id' => $id]);
   $oeuvre = $req->fetch();
 
   return $oeuvre;

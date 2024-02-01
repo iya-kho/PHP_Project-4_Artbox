@@ -1,4 +1,4 @@
-<form action="traitement.php" method="POST">
+<form action="ajouter.php" method="POST">
     <div class="champ-formulaire">
         <label for="titre">Titre de l'œuvre</label>
         <input type="text" name="titre" id="titre">
